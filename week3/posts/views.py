@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from .models import Post
 
 
+#### week 4 ####
 @require_http_methods(["GET"])
 def get_post_detail(request, id):
     post = get_object_or_404(Post, pk = id) # object를 가져오거나 or 404를 띄운다
@@ -23,21 +24,25 @@ def get_post_detail(request, id):
 
 @require_http_methods(["GET"])
 def get_posts(request):
-    # post = get_object_or_404(Post)
-    # Post.objects.get
-    # category_json = {
-    #     "id": post[0].post_id,
-    #     "writer": post[0].writer,
-    #     "content": post[0].content,
-    #     "category": post[0].category,
-    # }
+    posts = Post.objects.all()
+    postList = []
+    
+    for post in posts:
+        postList.append({
+            "id": post.post_id,
+            "writer": post.writer,
+            "content": post.content,
+            "category": post.category,
+        })
+    
     return JsonResponse({
         'status': 200,
-        'message': '게시글 조회 성공',
-        'data': "ok"
+        'message': '게시글 리스트 조회 성공',
+        'data': postList
     })
 
 
+#### week 3 ####
 def hello_world(request):
     if request.method == "GET":
         return JsonResponse({
