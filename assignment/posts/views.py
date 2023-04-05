@@ -4,8 +4,11 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from .models import Post
 
+# View == Controller와 비슷한 역할 
+
 
 #### week 4 ####
+# 스탠다드 과제 
 @require_http_methods(["GET"])
 def get_post_detail(request, id):
     post = get_object_or_404(Post, pk = id) # object를 가져오거나 or 404를 띄운다
@@ -16,12 +19,14 @@ def get_post_detail(request, id):
         "category": post.category,
     }
     
+    # JsonResponse는 HttpResponse를 상속받은 클래스 
     return JsonResponse({
         'status': 200,
         'message': '게시글 조회 성공',
         'data': category_json
     })
 
+# 챌린지 과제 
 @require_http_methods(["GET"])
 def get_posts(request):
     posts = Post.objects.all()
@@ -43,6 +48,7 @@ def get_posts(request):
 
 
 #### week 3 ####
+# 스탠다드 과제 
 def hello_world(request):
     if request.method == "GET":
         return JsonResponse({
@@ -51,7 +57,8 @@ def hello_world(request):
             'message': '메시지 전달 성공~',
             'data': 'Hello World',
         })
-        
+
+# 챌린지 과제
 def challenge(request):
     if request.method == "GET":
         return JsonResponse({

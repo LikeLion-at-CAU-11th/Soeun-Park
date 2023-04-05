@@ -27,5 +27,5 @@ class Post(BaseModel):  # BaseMode 클래스를 상속
 class Comment(BaseModel):
     writer = models.CharField(verbose_name="작성자", max_length=30)
     content = models.CharField(verbose_name="내용", max_length=200)
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, blank=False)
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, blank=False)    # Post를 참조(일대다 관계)
     # CASCADE: post가 삭제되었을 때 comment도 삭제됨
