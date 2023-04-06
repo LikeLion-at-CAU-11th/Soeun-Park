@@ -10,6 +10,7 @@ urlpatterns = [
     path('', get_all_posts, name="get_all_posts"),
     path('new-post', create_post, name="create_post"),
     path('<int:id>', post_detail, name="post_detail"),
+    path('date', get_posts_datetime, name="get_posts_datetime"),
     
     # comment
     path('<int:post_id>/comment', comment, name='comment'),

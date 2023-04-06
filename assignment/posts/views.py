@@ -4,9 +4,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from .models import Post, Comment
 import json
+from datetime import datetime, timedelta
 
-
-####    모든 posts 가져오기   ####
+####    모든 posts 조회하기   ####
 @require_http_methods(["GET"])
 def get_all_posts(request):
     posts = Post.objects.all()
@@ -54,7 +54,36 @@ def create_post(request):
     })
 
 
-####    post_detail 가져오기/수정하기/삭제하기  ####
+####    특정 기간에 생성된 post 조회하기(w5 챌린지 과제)    ####
+@require_http_methods(["GET"])
+def get_posts_datetime(request):
+    start_date_str = request.GET['from']
+    end_date_str = request.GET['to']
+    
+    # string -> datetime으로 타입 바꿔주기
+    start_datetime = datetime.strptime(start_date_str, "%Y-%m-%d")
+    end_datetime = datetime.strptime(end_date_str, "%Y-%m-%d") + timedelta(hours=23, minutes=59, seconds=59)    # 마지막날 23시 59분까지
+    
+    posts = Post.objects.filter(created_at__range=(start_datetime, end_datetime))
+    
+    posts_json_list = []
+    for post in posts:
+        posts_json_list.append({
+            "id": post.post_id,
+            "writer": post.writer,
+            "content": post.content,
+            "category": post.category,
+            "created_at": post.created_at,   # 시간 확인 차 넣어줌
+        })
+    
+    return JsonResponse({
+        'status': 200,
+        'message': '특정 기간에 작성된 게시글 조회 성공',
+        'data': posts_json_list
+    })
+
+
+####    post_detail 조회하기/수정하기/삭제하기  ####
 @require_http_methods(["GET", "PATCH", "DELETE"])
 def post_detail(request, id):
     if request.method == "GET":
@@ -107,7 +136,7 @@ def post_detail(request, id):
         })
 
 
-####    댓글 생성하기/가져오기  ####
+####    댓글 생성하기/조회하기  ####
 @require_http_methods(["GET", "POST"])
 def comment(request, post_id):
     if request.method == "GET":
