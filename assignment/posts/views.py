@@ -163,13 +163,13 @@ def comment(request, post_id):
         new_comment = Comment.objects.create(
             writer = body['writer'],
             content = body['content'],
-            post = Post.objects.get(pk=post_id)
+            post = post_id
         )
         
         new_comment_json = {
             'writer': new_comment.writer,
             'content': new_comment.content,
-            'post_id': new_comment.post.post_id # 확인용으로 post_id도 넣어주었다 
+            'post_id': new_comment.post # 확인용으로 post_id도 넣어주었다 
         }
         
         return JsonResponse({
