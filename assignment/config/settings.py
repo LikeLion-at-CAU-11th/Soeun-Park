@@ -60,7 +60,7 @@ PROJECT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    
+    "corsheaders",  # CORS 설정
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -75,6 +75,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# 허용된 Cors 출처(클라이언트)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+    "http://127.0.0.1:3000"
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -96,6 +105,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+# Django에서 요청을 처리할 수 있는 호스트를 정의
+ALLOWED_HOSTS = [
+    "*",    # 모든 호스트를 허용 
+    # 나중에는 클라이언트 도메인을 넣는다
+]   
 
 
 # Database
