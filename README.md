@@ -1,5 +1,24 @@
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?size=30&duration=4500&color=F77500&width=600&lines=%F0%9F%A6%81_Welcome_Soeun_Park_%F0%9F%A6%81+)](https://git.io/typing-svg)
 
+### Toy Project
+##### ERD
+![image](https://file.notion.so/f/s/f78db058-dc0f-421a-85be-90682c44e722/visitLog.png?id=15b9b6e3-e480-4036-aaa7-f7b4b5f32d0a&table=block&spaceId=9997a1ac-d414-4c7f-b56e-45cd95e21bc6&expirationTimestamp=1683806525415&signature=sqMuI6c2nJPcpB15Y_ijmrUv46hgEk3u9CYvj8f1Y6s&downloadName=visitLog.png)
+
+##### API Spec
+https://changeable-mechanic-889.notion.site/1b653baf1d894f92a241890695ef0028
+
+##### URL
+http://ll11th-toy-project.p-e.kr:8000/
+
+##### Repository
+https://github.com/separk314/LikeLion11_Toy_Project
+
+<br/>
+
+-----
+
+<br/>
+
 | 주차 | 스탠다드 과제 | 챌린지 과제 |
 |------|---|---|
 | week3 |![image](https://user-images.githubusercontent.com/71963320/227571454-0e9c5f68-b5b8-4582-b2fe-37d916c7e8d2.png)|![image](https://user-images.githubusercontent.com/71963320/227571584-9524c2ab-c6da-4d67-84e6-aafeafb4f3a4.png)|
