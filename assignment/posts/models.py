@@ -1,4 +1,5 @@
 from django.db import models
+# migrate -> DB에 반영
 
 # BaseModel 클래스: 공통으로 사용할 속성, 기능을 정의한 class
 class BaseModel(models.Model):
