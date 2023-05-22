@@ -61,6 +61,7 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     "corsheaders",  # CORS 설정
+    "rest_framework",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS

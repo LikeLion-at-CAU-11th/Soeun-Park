@@ -1,3 +1,4 @@
+# django
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -6,6 +7,63 @@ from .models import Post, Comment
 import json
 from datetime import datetime, timedelta
 
+# DRF
+from .serializers import PostSerializer
+from .serializers import CommentSerializer
+# APIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
+
+class PostList(APIView):
+    def post(self, request, format=None):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, format=None):
+        posts = Post.objects.all()  # queryset으로 받아오기
+        serializer = PostSerializer(posts, many=True)   # 많은 값을 받을 때는 many=True
+        return Response(serializer.data)
+    
+class PostDetail(APIView):
+    def get(self, request, id):
+        post = get_object_or_404(Post, post_id=id)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+    def put(self, request, id): # 모두 수정
+        post = get_object_or_404(Post, post_id=id)
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        post = get_object_or_404(Post, post_id=id)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class PostComment(APIView):
+    def get(self, request, id):
+        comments = Comment.objects.filter(post=id)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, id):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+'''
 ####    모든 posts 조회하기   ####
 @require_http_methods(["GET"])
 def get_all_posts(request):
@@ -87,7 +145,7 @@ def get_posts_datetime(request):
 @require_http_methods(["GET", "PATCH", "DELETE"])
 def post_detail(request, id):
     if request.method == "GET":
-        post = get_object_or_404(Post, pk = id) # object를 가져오거나 or 404를 띄운다
+        post = get_object_or_404(Post, pk = id) # object를 가져오거나 or 404를 띄운다(queryset 형태)
         category_json = {
             "id": post.post_id,
             "writer": post.writer,
@@ -177,38 +235,39 @@ def comment(request, post_id):
             'message': '댓글 생성 성공',
             'data': new_comment_json
         })
+'''
 
 
-
-
+'''
 #### week 3 ####
-# 스탠다드 과제 
-# def hello_world(request):
-#     if request.method == "GET":
-#         return JsonResponse({
-#             'status': 200,
-#             'success': True,
-#             'message': '메시지 전달 성공~',
-#             'data': 'Hello World',
-#         })
+스탠다드 과제 
+def hello_world(request):
+    if request.method == "GET":
+        return JsonResponse({
+            'status': 200,
+            'success': True,
+            'message': '메시지 전달 성공~',
+            'data': 'Hello World',
+        })
 
-# # 챌린지 과제
-# def challenge(request):
-#     if request.method == "GET":
-#         return JsonResponse({
-#             'status': 200,
-#             'success': True,
-#             'message': '메시지 전달 성공~~',
-#             'data': [
-#                 {
-#                     "name": "박소은",
-#                     "age": 23,
-#                     "major": "소프트",
-#                 },
-#                 {
-#                     "name": "이기웅",
-#                     "age": 24,
-#                     "major": "에너지시스템공학부"
-#                 }
-#             ]
-#         })
+# 챌린지 과제
+def challenge(request):
+    if request.method == "GET":
+        return JsonResponse({
+            'status': 200,
+            'success': True,
+            'message': '메시지 전달 성공~~',
+            'data': [
+                {
+                    "name": "박소은",
+                    "age": 23,
+                    "major": "소프트",
+                },
+                {
+                    "name": "이기웅",
+                    "age": 24,
+                    "major": "에너지시스템공학부"
+                }
+            ]
+        })
+'''
