@@ -1,12 +1,44 @@
-from django.urls import path
+from django.urls import path, include
 from posts.views import *
+from . import views
+from rest_framework.routers import DefaultRouter
 
+# Router 설정
+router = DefaultRouter()
+router.register('', PostViewSet)
+
+
+# ViewSet 사용
+urlpatterns = [
+    path('', include(router.urls)),
+    # path('<int:id>/comment', views.comment_list),
+]
+
+'''
+# Concrete Generic Views
+urlpatterns = [
+    path('', PostListGenericAPIView.as_view()),
+    path('<int:pk>/', PostDetailGenericAPIView.as_view()),
+]
+'''
+
+'''
+# Mixins 사용
+urlpatterns = [
+    path('', PostListMixins.as_view()),
+    path('<int:pk>/', PostDetailMixins.as_view()),
+]
+'''
+
+'''
+# DRF 사용
 urlpatterns = [
     # DRF urls
     path('', PostList.as_view()),
     path('<int:id>/', PostDetail.as_view()),
     path('<int:id>/comment', PostComment.as_view())
 ]
+'''
 
 '''
     # django
