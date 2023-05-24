@@ -6,12 +6,12 @@ from rest_framework.routers import DefaultRouter
 # Router 설정
 router = DefaultRouter()
 router.register('', PostViewSet)
-
+# router.register('<int:pk>/comment', CommentViewSet)
+router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)
 
 # ViewSet 사용
 urlpatterns = [
     path('', include(router.urls)),
-    # path('<int:id>/comment', views.comment_list),
 ]
 
 '''

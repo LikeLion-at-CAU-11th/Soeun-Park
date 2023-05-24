@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+
 # DRF 사용: 게시글 리스트
 class PostList(APIView):
     def post(self, request, format=None):
@@ -123,6 +124,12 @@ post_detail = PostViewSet.as_view({
     'delete': 'destroy',
 })
 '''
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
 
 
 
