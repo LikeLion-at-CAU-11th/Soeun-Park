@@ -5,9 +5,9 @@ from rest_framework.routers import DefaultRouter
 
 # Router 설정
 router = DefaultRouter()
-router.register('', PostViewSet)
+router.register('', PostViewSet)    # post 관련 api
 # router.register('<int:pk>/comment', CommentViewSet)
-router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)
+router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)   # comment 관련 api(정규표현식 사용)
 
 # ViewSet 사용
 urlpatterns = [
@@ -15,7 +15,7 @@ urlpatterns = [
 ]
 
 '''
-# Concrete Generic Views
+# Concrete Generic Views 사용
 urlpatterns = [
     path('', PostListGenericAPIView.as_view()),
     path('<int:pk>/', PostDetailGenericAPIView.as_view()),

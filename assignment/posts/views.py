@@ -74,23 +74,23 @@ class PostListMixins(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Ge
     serializer_class = PostSerializer
     
     def get(self, request, *args, **kwargs):
-        return self.list(request)
+        return self.list(request)   # ListModelMixin
     
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        return self.create(request, *args, **kwargs)    # CreateModelMixin
 
 class PostDetailMixins(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        return self.retrieve(request, *args, **kwargs)  # RetrieveModelMixin
     
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        return self.update(request, *args, **kwargs)    # UpdateModelMixin
     
     def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+        return self.destroy(request, *args, **kwargs)   # DestroyModelMixin
 
 
 # Concrete Generic Views 사용
@@ -106,14 +106,15 @@ class PostDetailGenericAPIView(generics.RetrieveUpdateDestroyAPIView):
 # ViewSet 사용
 from rest_framework import viewsets
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):   
+    # ModelViewSet: 목록 조회, 특정 레코드 생성/조회/수정/삭제
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 '''
 # DefaultRouter가 알아서 해주기 때문에 없어도 됨
 post_list = PostViewSet.as_view({
-    'get': 'list',
+    'get': 'list',  # 메소드 연결
     'post': 'create'
 })
 
