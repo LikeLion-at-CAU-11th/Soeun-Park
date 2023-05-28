@@ -6,7 +6,6 @@ from django.views.decorators.http import require_http_methods
 from .models import Post, Comment
 import json
 from datetime import datetime, timedelta
-
 # DRF
 from .serializers import PostSerializer
 from .serializers import CommentSerializer
@@ -16,6 +15,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+
+# DRF 사용: 게시글 리스트
 class PostList(APIView):
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
@@ -28,7 +29,8 @@ class PostList(APIView):
         posts = Post.objects.all()  # queryset으로 받아오기
         serializer = PostSerializer(posts, many=True)   # 많은 값을 받을 때는 many=True
         return Response(serializer.data)
-    
+
+# DRF 사용: 게시글 단일 객체
 class PostDetail(APIView):
     def get(self, request, id):
         post = get_object_or_404(Post, post_id=id)
@@ -48,6 +50,7 @@ class PostDetail(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# DRF 사용: 댓글
 class PostComment(APIView):
     def get(self, request, id):
         comments = Comment.objects.filter(post=id)
@@ -62,8 +65,78 @@ class PostComment(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Mixins 사용
+from rest_framework import mixins
+from rest_framework import generics
+
+class PostListMixins(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request)   # ListModelMixin
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)    # CreateModelMixin
+
+class PostDetailMixins(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)  # RetrieveModelMixin
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)    # UpdateModelMixin
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)   # DestroyModelMixin
+
+
+# Concrete Generic Views 사용
+class PostListGenericAPIView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class PostDetailGenericAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+# ViewSet 사용
+from rest_framework import viewsets
+
+class PostViewSet(viewsets.ModelViewSet):   
+    # ModelViewSet: 목록 조회, 특정 레코드 생성/조회/수정/삭제
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 '''
+# DefaultRouter가 알아서 해주기 때문에 없어도 됨
+post_list = PostViewSet.as_view({
+    'get': 'list',  # 메소드 연결
+    'post': 'create'
+})
+
+post_detail = PostViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy',
+})
+'''
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+
+
+
+
+'''
+# Django 사용
 ####    모든 posts 조회하기   ####
 @require_http_methods(["GET"])
 def get_all_posts(request):
