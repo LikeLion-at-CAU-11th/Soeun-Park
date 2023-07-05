@@ -11,7 +11,8 @@ router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)   # comment 관련 api
 
 # ViewSet 사용
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', PostList.as_view()),
+    path('<int:pk>/', PostDetail.as_view())
 ]
 
 '''

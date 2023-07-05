@@ -14,10 +14,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 # DRF 사용: 게시글 리스트
 class PostList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]    # 로그인하지 않으면 읽기만 가능
+    
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
