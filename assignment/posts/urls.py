@@ -4,15 +4,15 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 # Router 설정
-router = DefaultRouter()
-router.register('', PostViewSet)    # post 관련 api
+# router = DefaultRouter()
+# router.register('', PostViewSet)    # post 관련 api
 # router.register('<int:pk>/comment', CommentViewSet)
-router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)   # comment 관련 api(정규표현식 사용)
+# router.register('(?P<bk>[^/.]+)/comment', CommentViewSet)   # comment 관련 api(정규표현식 사용)
 
 # ViewSet 사용
 urlpatterns = [
     path('', PostList.as_view()),
-    path('<int:pk>/', PostDetail.as_view())
+    path('<int:id>/', PostDetail.as_view())
 ]
 
 '''

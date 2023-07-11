@@ -15,7 +15,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
+# 인가
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from config.permissions import IsWriterOrReadOnly
 
 
 # DRF 사용: 게시글 리스트
@@ -23,7 +25,7 @@ class PostList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]    # 로그인하지 않으면 읽기만 가능
     
     def post(self, request, format=None):
-        request.data['writer'] = request.user.id
+        request.data['writer'] = request.user.id    # 현재 로그인된 user
         serializer = PostSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -38,6 +40,8 @@ class PostList(APIView):
 
 # DRF 사용: 게시글 단일 객체
 class PostDetail(APIView):
+    permission_classes = [IsWriterOrReadOnly]
+    
     def get(self, request, id):
         post = get_object_or_404(Post, post_id=id)
         serializer = PostSerializer(post)
@@ -45,7 +49,10 @@ class PostDetail(APIView):
 
     def put(self, request, id): # 모두 수정
         post = get_object_or_404(Post, post_id=id)
+        request.data['writer'] = request.user.id    # 현재 로그인된 user
+        self.check_object_permissions(request, post)    # 작성자 동일한지 체크
         serializer = PostSerializer(post, data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -53,6 +60,8 @@ class PostDetail(APIView):
     
     def delete(self, request, id):
         post = get_object_or_404(Post, post_id=id)
+        request.data['writer'] = request.user.id    # 현재 로그인된 user
+        self.check_object_permissions(request, post)    # 작성자 동일한지 체크
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
