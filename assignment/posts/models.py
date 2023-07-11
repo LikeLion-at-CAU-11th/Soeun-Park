@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Member
 # migrate -> DB에 반영
 
 # BaseModel 클래스: 공통으로 사용할 속성, 기능을 정의한 class
@@ -11,7 +12,7 @@ class BaseModel(models.Model):
         abstract = True # BaseModel을 상속 가능하도록
 
 class Post(BaseModel):  # BaseMode 클래스를 상속
-
+    
     CHOICES = (
         ('DIARY', '일기'),
         ('STUDY', '공부'),
@@ -19,10 +20,10 @@ class Post(BaseModel):  # BaseMode 클래스를 상속
     )
 
     post_id = models.AutoField(primary_key=True)
-    writer = models.CharField(verbose_name="작성자", max_length=30)
+    writer = models.ForeignKey(to=Member, on_delete=models.CASCADE, blank=False)
+    # writer = models.CharField(verbose_name="작성자", max_length=30)
     content = models.TextField(verbose_name="내용")
-    category = models.CharField(choices=CHOICES, max_length=20)
-    # choices: dropbox
+    category = models.CharField(choices=CHOICES, max_length=20) # choices: dropbox
 
 
 class Comment(BaseModel):

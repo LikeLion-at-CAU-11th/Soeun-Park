@@ -1,4 +1,5 @@
 # django
+import sys
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -22,7 +23,9 @@ class PostList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]    # 로그인하지 않으면 읽기만 가능
     
     def post(self, request, format=None):
+        request.data['writer'] = request.user.id
         serializer = PostSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
