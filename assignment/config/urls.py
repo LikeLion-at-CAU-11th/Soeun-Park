@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("posts/", include('posts.urls'),)  # post 앱으로 이동 
+    path("posts/", include('posts.urls'),),  # post 앱으로 이동 
+    path("accounts/", include('accounts.urls'),)
 ]

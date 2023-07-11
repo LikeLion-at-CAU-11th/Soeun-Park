@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import json
 from django.core.exceptions import *
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,6 +63,7 @@ PROJECT_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",  # CORS 설정
     "rest_framework",
+    'rest_framework_simplejwt',    # 인증/인가
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -160,3 +162,21 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# jwt 인증/인가
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+REST_USE_JWT = True
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),    # 유효기간 3시간
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # 유효기간 7일
+    'ROTATE_REFRESH_TOKENS': False,     # True: TokenRefreshView에 refresh token을 보내면 새로운 토큰이 반환됨
+    'BLACKLIST_AFTER_ROTATION': False,  # True: TokenRefreshView에 보낸 refresh token을 블랙리스트에 추가 -> 같은 refresh token이 반환되지 않도록
+    'TOKEN_USER_CLASS': 'accounts.Member',  # 사용자 모델을 연결
+}
