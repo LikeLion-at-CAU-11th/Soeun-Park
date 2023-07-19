@@ -18,6 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("posts/", include('posts.urls'),),  # post 앱으로 이동 
-    path("accounts/", include('accounts.urls'),)
+    path("posts/", include('posts.urls'),),
+    path("accounts/", include('accounts.urls'),),
+    path('accounts/', include('dj_rest_auth.urls')),    # auth 라이브러리를 accounts앱에 매핑
+    path('accounts/', include('allauth.urls')),
 ]
