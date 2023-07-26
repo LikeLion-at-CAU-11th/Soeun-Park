@@ -21,9 +21,9 @@ class Post(BaseModel):  # BaseMode 클래스를 상속
 
     post_id = models.AutoField(primary_key=True)
     writer = models.ForeignKey(to=Member, on_delete=models.CASCADE, blank=False)
-    # writer = models.CharField(verbose_name="작성자", max_length=30)
     content = models.TextField(verbose_name="내용")
     category = models.CharField(choices=CHOICES, max_length=20) # choices: dropbox
+    thumbnail = models.ImageField(verbose_name="썸네일")
 
 
 class Comment(BaseModel):
